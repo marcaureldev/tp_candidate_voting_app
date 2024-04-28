@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:candidate_vote_app/models/candidate.dart';
 import 'package:candidate_vote_app/common/input_form.dart';
 import 'package:candidate_vote_app/common/button_form.dart';
+import 'package:http/http.dart' as http;
 
 class AddCandidateForm extends StatefulWidget {
   const AddCandidateForm({super.key});
@@ -13,6 +16,7 @@ class AddCandidateForm extends StatefulWidget {
 class _AddCandidateFormState extends State<AddCandidateForm> {
   final _formKey = GlobalKey<FormState>();
   final Candidate candidate = Candidate();
+  List<Candidate> candidates = [];
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +83,44 @@ class _AddCandidateFormState extends State<AddCandidateForm> {
                   candidate.profil_image = value;
                 },
               ),
-              
               SizedBox(height: 20),
-
               ButtonForm(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    Navigator.pop(context, candidate);
+
+                    var url =
+                        Uri.https('jsonplaceholder.typicode.com', '/users');
+
+                    var response = await http.post(
+                      url,
+                      body: jsonEncode(
+                          candidate.toJson()), // Convertir l'objet en JSON
+                    );
+
+                    if (response.statusCode == 201) {
+
+                        _formKey.currentState!.save();
+                      Navigator.pop(context, candidate);
+                    } 
+                    else 
+                    
+                    {
+                      // Si la soumission échoue, afficher un message d'erreur
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Erreur'),
+                          content: const Text(
+                              'La soumission a échoué. Veuillez réessayer.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }
                 },
                 text: "Register as Candidate",

@@ -23,10 +23,11 @@ class _CandidateListState extends State<CandidateList> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage("${candidate.profil_image}"),
-                  ),
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage:
+                          NetworkImage("${candidate.profil_image}"),
+                    ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,26 +41,6 @@ class _CandidateListState extends State<CandidateList> {
                   SizedBox(width: 8),
                 ],
               ),
-
-              // Row(
-              //   children: [
-              //     CircleAvatar(
-              //       child: ClipOval(
-              //         child: Image.network("${candidate.profil_image}",
-              //         fit: BoxFit.cover,
-              //         width: 100,
-              //         height: 100,
-              //         ),
-              //       ),
-              //     ),
-              //     Column(
-              //       children: [
-              //         Text("${candidate.name} ${candidate.surname}"),
-              //         Text("${candidate.describe}"),
-              //       ],
-              //     ),
-              //   ],
-              // ),
               SizedBox(height: 10), // Espace entre les candidats
             ],
           );
